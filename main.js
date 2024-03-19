@@ -1,3 +1,7 @@
+const rockButton = document.querySelector("#rock");
+const paperButton = document.querySelector("#paper");
+const scissorButton = document.querySelector("#scissor");
+
 // global variables
 let playerChoice;
 let computerChoice;
@@ -5,11 +9,6 @@ let playerScore = 0;
 let computerScore = 0;
 
 // utility functions
-function cleanData(string) {
-  let normalizedPlayerInput = string.toLowerCase();
-  return normalizedPlayerInput;
-}
-
 function pointAssignment(result) {
   if (result === false) {
     computerScore++;
@@ -21,22 +20,12 @@ function pointAssignment(result) {
   }
 }
 
-function determineWinner(playerScore, computerScore) {
-  if (playerScore > computerScore) {
-    return "The player wins the game!";
-  } else if (computerScore > playerScore) {
-    return "The computer wins the game!";
-  } else {
-    return "It's a draw.";
-  }
-}
-
 // write a function where both the player and computer chooses their move
-function getReady() {
+function getReady(choice) {
   const moves = ["rock", "paper", "scissors"];
   const randomNumber = Math.floor(Math.random(3) * 3);
 
-  playerChoice = cleanData(prompt());
+  playerChoice = choice;
   computerChoice = moves[randomNumber];
 }
 
@@ -57,25 +46,38 @@ function showdown(playerChoice, computerChoice) {
 }
 
 // play the actual game
-function playGame() {
-  let round = 1;
-  // play through 5 rounds
-  while (round <= 5) {
-    console.log(`Round ${round}!`);
-    // prep the players
-    getReady();
-    // compare moves and assign points
-    console.log(
-      `Player selected ${playerChoice}. Computer selected ${computerChoice}.`
-    );
-    pointAssignment(showdown(playerChoice, computerChoice));
-    round += 1;
-  }
+function playGame(choice) {
+  // prep the players
+  getReady(choice);
+  // compare moves and assign points
+  console.log(
+    `Player selected ${playerChoice}. Computer selected ${computerChoice}.`
+  );
+  pointAssignment(showdown(playerChoice, computerChoice));
   // returns one winner either the player or the computer
   console.log(
     `The player has a score of ${playerScore} and the computer has a score of ${computerScore}.`
   );
-  console.log(determineWinner(playerScore, computerScore));
+  console.log("==================================");
+  if (computerScore === 5 || playerScore === 5) {
+    console.log(`
+      The final score is...\n
+      Player Score: ${playerScore}\n
+      Computer Score: ${computerScore}
+    `);
+    computerScore = 0;
+    playerScore = 0;
+  }
 }
 
-playGame();
+rockButton.addEventListener("click", () => {
+  playGame("rock");
+});
+
+paperButton.addEventListener("click", () => {
+  playGame("paper");
+});
+
+scissorButton.addEventListener("click", () => {
+  playGame("scissor");
+});
